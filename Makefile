@@ -5,16 +5,14 @@ ODIR=./obj
 CC=gcc
 CFLAGS=-I$(IDIR)
 
-_OBJ=main.o
+_OBJ=main.o can_utilities.o
 OBJ=$(patsubst %, $(ODIR)/%, $(_OBJ))
 
-DEPS=
-
-$(ODIR)/%.o:	%.c $(DEPS)
+$(ODIR)/%.o:	%.c $(IDIR)/*.h
 				$(CC) -c -o $@ $< $(CFLAGS)
 
 main:	$(OBJ)
 		$(CC) -o $@ $^ $(CFLAGS)
 
 clean:
-		rm -f $(ODIR)/*.o
+		rm -f $(ODIR)/*.o main
