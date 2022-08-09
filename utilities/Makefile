@@ -3,7 +3,7 @@ IDIR=../include
 ODIR=../obj
 
 CC=gcc
-CFLAGS=-I$(IDIR)
+CFLAGS=-I$(IDIR) -lcjson
 
 _OBJ=can_utilities.o json_utilities.o
 OBJ=$(patsubst %, $(ODIR)/%, $(_OBJ))

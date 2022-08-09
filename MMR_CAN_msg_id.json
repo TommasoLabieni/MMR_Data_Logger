@@ -1,15 +1,113 @@
 {
-    "__comment__": "!!!!!!!!!!! VERY IMPORTANT: ALL MSGS IDS HAVE TO BE INTEGERS SINCE JSON DOES NOT SUPPORT HEX VALUES !!!!!!!!!!!",
+    "__COMMENTS__": [
+        {
+            "__Main_Info__": "!!!!!!!!!!! VERY IMPORTANT: ALL MSGS IDS HAVE TO BE INTEGERS SINCE JSON DOES NOT SUPPORT HEX VALUES !!!!!!!!!!!",
+            "__Percentage_Comment__": "all % vals must have a MAX_PERC_VALUE param in order to calculate the percentage backend side",
+            "__ECU_Comment__": "all ECU messages must have a ECU_PAYLOAD objs array in order to read properly an ECU msg backend side"
+        }
+    ],
+
     "msg_500": [
         {
-            "SPEED_ACTUAL_ID": 141,
-            "SPEED_TARGET_ID": 143,
-            "STEER_ACTUAL_ID": 267,
-            "STEER_TARGET_ID": 138,
-            "BRAKE_ACTUAL_ID": 295,
-            "BRAKE_TARGET_ID": 297,
-            "MOTOR_M_ACTUAL_ID":192,
-            "MOTOR_M_TARGET_ID":140
+            "SPEED_ACTUAL": [
+                {
+                    "PAYLOAD_BIT_START": 0,
+                    "PAYLOAD_BIT_END": 7,
+                    "FORMAT": "unsigned",
+                    "IS_PERCENTAGE": false,
+                    "IS_ECU_MSG": false,
+                    "SCALE": 1,
+                    "MMR_ID": 141
+                }
+            ],
+            "SPEED_TARGET": [
+                {
+                    "PAYLOAD_BIT_START": 8,
+                    "PAYLOAD_BIT_END": 15,
+                    "FORMAT": "unsigned",
+                    "IS_PERCENTAGE": false,
+                    "IS_ECU_MSG": false,
+                    "SCALE": 1,
+                    "MMR_ID": 143
+                }
+            ],
+            "STEER_ACTUAL": [
+                {
+                    "PAYLOAD_BIT_START": 16,
+                    "PAYLOAD_BIT_END": 23,
+                    "FORMAT": "signed",
+                    "IS_PERCENTAGE": false,
+                    "IS_ECU_MSG": false,
+                    "SCALE": 0.5,
+                    "MMR_ID": 267
+                }
+            ],
+            "STEER_TARGET": [
+                {
+                    "PAYLOAD_BIT_START": 24,
+                    "PAYLOAD_BIT_END": 31,
+                    "FORMAT": "signed",
+                    "IS_PERCENTAGE": false,
+                    "IS_ECU_MSG": false,
+                    "SCALE": 0.5,
+                    "MMR_ID": 138
+                }
+            ],
+            "BRAKE_ACTUAL": [
+                {
+                    "PAYLOAD_BIT_START": 32,
+                    "PAYLOAD_BIT_END": 39,
+                    "FORMAT": "unsigned",
+                    "IS_PERCENTAGE": true,
+                    "MAX_PERC_VALUE": 1000,
+                    "IS_ECU_MSG": false,
+                    "SCALE": 1,
+                    "MMR_ID": 295
+                }
+            ],
+            "BRAKE_TARGET": [
+                {
+                    "PAYLOAD_BIT_START": 40,
+                    "PAYLOAD_BIT_END": 47,
+                    "FORMAT": "unsigned",
+                    "IS_PERCENTAGE": true,
+                    "MAX_PERC_VALUE": 1000,
+                    "IS_ECU_MSG": false,
+                    "SCALE": 1,
+                    "MMR_ID": 297
+                }
+            ],
+            "MOTOR_M_ACTUAL": [
+                {
+                    "PAYLOAD_BIT_START": 48,
+                    "PAYLOAD_BIT_END": 55,
+                    "FORMAT": "signed",
+                    "IS_PERCENTAGE": true,
+                    "MAX_PERC_VALUE": 10000,
+                    "IS_ECU_MSG": true,
+                    "ECU_PAYLOAD": [
+                        {
+                            "BYTE_LENGTH": 2,
+                            "BYTE_START": 6,
+                            "DIVIDE_BY": 100
+                        }
+                    ],
+                    "SCALE": 1,
+                    "MMR_ID": 194
+                }
+            ],
+            "MOTOR_M_TARGET": [
+                {
+                    "PAYLOAD_BIT_START": 56,
+                    "PAYLOAD_BIT_END": 63,
+                    "FORMAT": "signed",
+                    "IS_PERCENTAGE": true,
+                    "MAX_PERC_VALUE": 1000,
+                    "IS_ECU_MSG": false,
+                    "SCALE": 1,
+                    "MMR_ID": 140
+                }
+            ]
         }   
     ]
 }
