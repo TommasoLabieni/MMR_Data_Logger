@@ -109,6 +109,37 @@ int main(int argc, char **argv)
 				printf("%d:%x ", i, recv_frame.data[i]);
 			}
 			printf("\n");
+
+			canid_t egress_msg_id = MMR_CAN_frame_to_EGRESS_frame(msg_50x_sniffer, recv_frame.can_id & CAN_SFF_MASK);
+			if (egress_msg_id != ERR_MSG_ID)
+			{
+				printf("THIS MESSAGES GOES INTO MSG OF ID: %x\n", egress_msg_id);
+				switch (egress_msg_id)
+				{
+				case 0x500:
+					ret = insert_MMR_CAN_frame_into_EGRESS_frame(recv_frame, &(msg_50x_sniffer[0]));
+					break;
+				case 0x501:
+					ret = insert_MMR_CAN_frame_into_EGRESS_frame(recv_frame, &(msg_50x_sniffer[1]));
+					break;
+				case 0x502:
+					ret = insert_MMR_CAN_frame_into_EGRESS_frame(recv_frame, &(msg_50x_sniffer[2]));
+					break;
+				default:
+					perror("SOMETHING IS WRONG! RECEIVED AN EXTERNAL CAN FRAME!!!!");
+					exit(5);
+					break;
+				}
+
+				if (ret)
+				{
+					perror("Error during frame insert\n");
+					exit(6);
+				}
+			} else {
+					perror("SOMETHING IS WRONG! RECEIVED AN EXTERNAL CAN FRAME!!!!");
+					exit(5);
+			}
 		}
 	}
 
