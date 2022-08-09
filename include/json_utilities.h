@@ -1,3 +1,6 @@
+#ifndef JSON_UTILITIES_H
+#define JSON_UTILITIES_H
+
 #include <basic_utils.h>
 #include <cjson/cJSON.h>
 
@@ -33,17 +36,28 @@ typedef struct
 typedef struct
 {
     cJSON_50x_msg_info_t msg_info;
-} cJSON_msg_500_t;
+    unsigned int msg_id;
+} cJSON_msg_50x_t;
 
-void parse_MMR_CAN_msg_id(const char * const monitor);
+
 /*
-    This function creates msg with ID 500
+    This function is used to parse a JSON-MMR-formatted file and to return the reference to the 3 CAN frames to egress.
+
+    @return: reference to the 3 CAN frames to egress
+
+*/ 
+cJSON_msg_50x_t* parse_MMR_CAN_msg_id();
+/*
+    This function creates msg with ID 50x
     @param msg: reference to the msg that has to be created
     @param parser: JSON File parser
+    @param msg_id: Id of the message
+    @param n_MMR_msgs: number of messages to parse 
+    @param fields: JSON-MMR-formatted Field to parse
 
     @return: 0 if success otherwise -1
 */
-int create_msg_500(cJSON_msg_500_t* msg, cJSON* parser);
+int create_msg_50x(cJSON_msg_50x_t* msg, cJSON* parser, unsigned int msg_id, unsigned int n_MMR_msgs, char** fields);
 /*
     This function checks wether a msg has correctly formatted params or not
 
@@ -62,3 +76,12 @@ int check_msg_info_correctness(unsigned int msg_id, char* msg_desc, cJSON_msg_in
     @return: nothing
 */
 void print_common_msgs_info(cJSON_msg_info_t* msg);
+/* 
+    Thif function reads a JSON file (with MMR Format) and test the software
+
+    @param filename: Name of the JSON file
+
+    @return: 0 if ok otherwise -1
+*/
+int test_func(char* filename);
+#endif //JSON_UTILITIES_H

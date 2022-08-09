@@ -3,7 +3,8 @@
         {
             "__Main_Info__": "!!!!!!!!!!! VERY IMPORTANT: ALL MSGS IDS HAVE TO BE INTEGERS SINCE JSON DOES NOT SUPPORT HEX VALUES !!!!!!!!!!!",
             "__Percentage_Comment__": "all % vals must have a MAX_PERC_VALUE param in order to calculate the percentage backend side",
-            "__ECU_Comment__": "all ECU messages must have a ECU_PAYLOAD objs array in order to read properly an ECU msg backend side"
+            "__ECU_Comment__": "all ECU messages must have a ECU_PAYLOAD objs array in order to read properly an ECU msg backend side",
+            "__FORMAT_Comment": "Format msg can be a string such as bool, signed, unsigned, but also a num. In this last case in this JSON memorize the max format number to memorize for each MSG (note that format numbers start from 1 and not from 0!)"
         }
     ],
 
@@ -109,5 +110,142 @@
                 }
             ]
         }   
+    ],
+    "msg_501": [
+        {
+            "ACC_LONGITUDINAL": [
+                {
+                    "PAYLOAD_BIT_START": 0,
+                    "PAYLOAD_BIT_END": 15,
+                    "FORMAT": "signed",
+                    "IS_PERCENTAGE": false,
+                    "IS_ECU_MSG": false,
+                    "SCALE": 0.001953125,
+                    "MMR_ID": 149
+                }
+            ],
+            "ACC_LATERAL": [
+                {
+                    "PAYLOAD_BIT_START": 16,
+                    "PAYLOAD_BIT_END": 31,
+                    "FORMAT": "signed",
+                    "IS_PERCENTAGE": false,
+                    "IS_ECU_MSG": false,
+                    "SCALE": 0.001953125,
+                    "MMR_ID": 150
+                }
+            ],
+            "YAW_RATE": [
+                {
+                    "PAYLOAD_BIT_START": 32,
+                    "PAYLOAD_BIT_END": 47,
+                    "FORMAT": 1,
+                    "IS_PERCENTAGE": false,
+                    "IS_ECU_MSG": false,
+                    "SCALE": 0.0078125,
+                    "MMR_ID": 151
+                }
+            ]
+        }
+    ],
+    "msg_502": [
+        {
+            "AS_STATE": [
+                {
+                    "PAYLOAD_BIT_START": 0,
+                    "PAYLOAD_BIT_END": 2,
+                    "FORMAT": 5,
+                    "IS_PERCENTAGE": false,
+                    "IS_ECU_MSG": false,
+                    "SCALE": 1,
+                    "MMR_ID": 44
+                }
+            ],
+            "EBS_STATE": [
+                {
+                    "PAYLOAD_BIT_START": 3,
+                    "PAYLOAD_BIT_END": 4,
+                    "FORMAT": 3,
+                    "IS_PERCENTAGE": false,
+                    "IS_ECU_MSG": false,
+                    "SCALE": 1,
+                    "MMR_ID": 42
+                }
+            ],
+            "AMI_STATE": [
+                {
+                    "PAYLOAD_BIT_START": 5,
+                    "PAYLOAD_BIT_END": 7,
+                    "FORMAT": 6,
+                    "IS_PERCENTAGE": false,
+                    "IS_ECU_MSG": false,
+                    "SCALE": 1,
+                    "MMR_ID": 64
+                }
+            ],
+            "STEERING_STATE": [
+                {
+                    "PAYLOAD_BIT_START": 8,
+                    "PAYLOAD_BIT_END": 8,
+                    "FORMAT": "bool",
+                    "IS_PERCENTAGE": false,
+                    "IS_ECU_MSG": false,
+                    "SCALE": 1,
+                    "MMR_ID": 144
+                }
+            ],
+            "SERVICE_BRAKE_STATE": [
+                {
+                    "PAYLOAD_BIT_START": 9,
+                    "PAYLOAD_BIT_END": 10,
+                    "FORMAT": 3,
+                    "IS_PERCENTAGE": false,
+                    "IS_ECU_MSG": true,
+                    "ECU_PAYLOAD": [
+                        {
+                            "BYTE_LENGTH": 2,
+                            "BYTE_START": 0,
+                            "DIVIDE_BY": 200
+                        }
+                    ],
+
+                    "SCALE": 1,
+                    "MMR_ID": 199
+                }
+            ],
+            "LAP_COUNTER": [
+                {
+                    "PAYLOAD_BIT_START": 11,
+                    "PAYLOAD_BIT_END": 15,
+                    "FORMAT": "unsigned",
+                    "IS_PERCENTAGE": false,
+                    "IS_ECU_MSG": false,
+                    "SCALE": 1,
+                    "MMR_ID": 145
+                }
+            ],
+            "CONES_COUNT_ACTUAL": [
+                {
+                    "PAYLOAD_BIT_START": 16,
+                    "PAYLOAD_BIT_END": 23,
+                    "FORMAT": "unsigned",
+                    "IS_PERCENTAGE": false,
+                    "IS_ECU_MSG": false,
+                    "SCALE": 1,
+                    "MMR_ID": 146
+                }
+            ],
+            "CONES_COUNT_TOTAL": [
+                {
+                    "PAYLOAD_BIT_START": 24,
+                    "PAYLOAD_BIT_END": 39,
+                    "FORMAT": "unsigned",
+                    "IS_PERCENTAGE": false,
+                    "IS_ECU_MSG": false,
+                    "SCALE": 1,
+                    "MMR_ID": 147
+                }
+            ]
+        }
     ]
 }

@@ -1,9 +1,13 @@
 #include <json_utilities.h>
 
-void parse_MMR_CAN_msg_id(const char * const monitor)
+char* fileToCString(char* filename);
+
+cJSON_msg_50x_t* parse_MMR_CAN_msg_id()
 {
-    cJSON_msg_500_t msg_500;
+    cJSON_msg_50x_t* msg_50x = malloc(3*sizeof(cJSON_msg_50x_t));
     cJSON *msg_parser, *msg_parser_it, *msg_info, *msg_info_it;
+    
+    const char * const monitor = fileToCString(JSON_FILENAME);
     
     cJSON *monitor_json = cJSON_Parse(monitor);
 
@@ -13,21 +17,52 @@ void parse_MMR_CAN_msg_id(const char * const monitor)
         exit(1);
     }
 
+
+    /* ********** CREATION OF MSG 500  ********** */
+    
     msg_parser = cJSON_GetObjectItemCaseSensitive(monitor_json, "msg_500");
-    create_msg_500(&msg_500, msg_parser);
+
+    /* Matrix containing all MSG 500 fields */
+    char *msg_500_fields[MSG_500_N_MMR_MSGS] = {"SPEED_ACTUAL", "SPEED_TARGET","STEER_ACTUAL", "STEER_TARGET","BRAKE_ACTUAL", "BRAKE_TARGET","MOTOR_M_ACTUAL", "MOTOR_M_TARGET"}; 
+    
+    create_msg_50x(&msg_50x[0], msg_parser, 0x500, MSG_500_N_MMR_MSGS, msg_500_fields);
+    
+    /* ****************************************** */
+
+    /* ********** CREATION OF MSG 501  ********** */
+
+    msg_parser = cJSON_GetObjectItemCaseSensitive(monitor_json, "msg_501");
+
+    /* Matrix containing all MSG 501 fields */
+    char *msg_501_fields[MSG_501_N_MMR_MSGS] = {"ACC_LONGITUDINAL", "ACC_LATERAL", "YAW_RATE"}; 
+    
+    create_msg_50x(&msg_50x[1], msg_parser, 0x501, MSG_501_N_MMR_MSGS, msg_501_fields);
+    
+    /* ****************************************** */
+
+    /* ********** CREATION OF MSG 502  ********** */
+
+    msg_parser = cJSON_GetObjectItemCaseSensitive(monitor_json, "msg_502");
+
+    /* Matrix containing all MSG 502 fields */
+    char *msg_502_fields[MSG_502_N_MMR_MSGS] = {"AS_STATE", "EBS_STATE","AMI_STATE", "STEERING_STATE","SERVICE_BRAKE_STATE", "LAP_COUNTER","CONES_COUNT_ACTUAL", "CONES_COUNT_TOTAL"}; 
+
+    create_msg_50x(&msg_50x[2], msg_parser, 0x502,  MSG_502_N_MMR_MSGS, msg_502_fields);
+
+    /* ****************************************** */
+
+    return msg_50x;
 }
 
-int create_msg_500(cJSON_msg_500_t* msg, cJSON* parser)
+int create_msg_50x(cJSON_msg_50x_t* msg, cJSON* parser, unsigned int msg_id, unsigned int n_MMR_msgs, char** fields)
 {
+    printf("Creating Message 0x%.3x\n", msg_id & 0x7FF);
     cJSON *ECU_payload, *ECU_payload_it, *parser_it, *msg_info, *msg_info_it;
 
     err_t ret;
     
-    /* Matrix containing all MSG 500 fields */
-    char *fields[MSG_500_DLC] = {"SPEED_ACTUAL", "SPEED_TARGET","STEER_ACTUAL", "STEER_TARGET","BRAKE_ACTUAL", "BRAKE_TARGET","MOTOR_M_ACTUAL", "MOTOR_M_TARGET"}; 
-
     /* Allocate memory for msg info */
-    msg->msg_info.msg_info_ptr = malloc(MSG_500_DLC * sizeof(cJSON_msg_info_t));
+    msg->msg_info.msg_info_ptr = malloc(n_MMR_msgs * sizeof(cJSON_msg_info_t));
 
     if (msg == NULL)
     {
@@ -36,12 +71,15 @@ int create_msg_500(cJSON_msg_500_t* msg, cJSON* parser)
     }
 
     /* Assign msg_info_t description from fields matrix */
-    for (unsigned int i=0; i < MSG_500_DLC; i++)
+    for (unsigned int i=0; i < n_MMR_msgs; i++)
     {
         strcpy(msg->msg_info.msg_info_desc[i], fields[i]);
-    } 
+    }
 
-    for (unsigned int i=0; i < MSG_500_DLC; i++)
+    /* Assign the length of the frame */
+    msg->msg_info.length =  n_MMR_msgs;
+
+    for (unsigned int i=0; i < n_MMR_msgs; i++)
     {
         cJSON_ArrayForEach(parser_it, parser)
         {
@@ -86,7 +124,7 @@ int create_msg_500(cJSON_msg_500_t* msg, cJSON* parser)
 
 int check_msg_info_correctness(unsigned int msg_id, char* msg_desc, cJSON_msg_info_t* msg)
 {
-    printf("CHECKING MESSAGE %x. FIELD: %s\n", msg_id, msg_desc);
+    // printf("CHECKING MESSAGE %x. FIELD: %s\n", msg_id, msg_desc);
 
     /* Check PBS */
     if (!cJSON_IsNumber(msg->msg_PBS))
@@ -175,12 +213,23 @@ void print_common_msgs_info(cJSON_msg_info_t* msg)
 {
     char info[1000];
 
-    sprintf(info, "Payload bit Start: %d\nPayload bit End: %d\nFORMAT: %s\nIS_PERC: %s\n", 
+    sprintf(info, "Payload bit Start: %d\nPayload bit End: %d\n", 
         msg->msg_PBS->valueint,
-        msg->msg_PBE->valueint,
-        msg->msg_FORMAT->valuestring,
-        (msg->msg_IS_PERCENTAGE->valueint  ? "true" : "false")
+        msg->msg_PBE->valueint
     );
+
+    /* Checking FORMAT Data Type */
+    if (cJSON_IsString(msg->msg_FORMAT))
+    {
+        /* String data type */
+        sprintf(info, "%sFORMAT: %s\n", info, msg->msg_FORMAT->valuestring);
+    } else
+    {
+        /* Integer data type */
+        sprintf(info, "%sFORMAT: %d\n", info, msg->msg_FORMAT->valueint);
+    }
+
+    sprintf(info, "%sIS_PERCENTAGE: %s\n", info, (msg->msg_IS_PERCENTAGE->valueint  ? "true" : "false"));
 
     if (msg->msg_IS_PERCENTAGE->valueint)
     {
@@ -198,21 +247,23 @@ void print_common_msgs_info(cJSON_msg_info_t* msg)
         );
     }
 
+    sprintf(info, "%sSCALE: %d\nMMR_ID: %.3x", info, msg->msg_SCALE->valueint, msg->msg_MMR_ID->valueint);
+
     printf("%s\n", info);
 }
 
-int main(void)
+char* fileToCString(char* filename)
 {
     long len = 0;
     int temp;
-    char *JSON_content, *filename = "./MMR_CAN_msg_id.json";
+    char *JSON_content;
 	
 
     FILE* fp = fopen(filename, "rb+");
     if(!fp)
     {
 		perror("err open");
-        return 1;
+        return NULL;
     }
 
     fseek(fp, 0, SEEK_END);
@@ -220,7 +271,7 @@ int main(void)
     if(0 == len)
     {
 		perror("len");
-        return 1;
+        return NULL;
     }
 
     fseek(fp, 0, SEEK_SET);
@@ -228,6 +279,13 @@ int main(void)
     temp = fread(JSON_content, 1, len, fp);
 
     fclose(fp);
+
+    return JSON_content;
+}
+
+int test_func(char *filename)
+{
+    char* JSON_content = fileToCString(filename);
     parse_MMR_CAN_msg_id(JSON_content);
 
 	return 0;
