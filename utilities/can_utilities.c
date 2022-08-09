@@ -31,7 +31,7 @@ void create_sniffer_filters(struct can_filter* filters, const cJSON_msg_50x_t* m
     }
 }
 
-char* get_MMR_CAN_frame_descripion(cJSON_msg_50x_t* msg_50x, unsigned int msg_id)
+char* get_MMR_CAN_frame_description(cJSON_msg_50x_t* msg_50x, unsigned int msg_id)
 {
     for (int i=0; i < NUM_CAN_FRAMES_TO_EGRESS; i++)
     {

@@ -99,7 +99,7 @@ int main(int argc, char **argv)
 			exit(4);
 		} else if (nbytes == sizeof(struct can_frame))
 		{
-			char* msg_desc = get_MMR_CAN_frame_descripion(msg_50x_sniffer, recv_frame.can_id & CAN_SFF_MASK);
+			char* msg_desc = get_MMR_CAN_frame_description(msg_50x_sniffer, recv_frame.can_id & CAN_SFF_MASK);
 			if (msg_desc != NULL)
 			{
 				printf("ID: %.3x\t --> %s.\n\tDATA:\t", recv_frame.can_id & CAN_SFF_MASK, msg_desc);
