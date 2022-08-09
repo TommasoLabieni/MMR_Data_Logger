@@ -7,6 +7,10 @@
 #include <unistd.h>
 #include <stdbool.h>
 
+#include <linux/can.h>
+#include <linux/can/raw.h>
+#include <linux/can/bcm.h>
+
 typedef int err_t;
 typedef char error_msg[255];
 
