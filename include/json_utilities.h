@@ -36,7 +36,7 @@ typedef struct
 typedef struct
 {
     cJSON_50x_msg_info_t msg_info;
-    unsigned int msg_id;
+    canid_t msg_id;
 } cJSON_msg_50x_t;
 
 

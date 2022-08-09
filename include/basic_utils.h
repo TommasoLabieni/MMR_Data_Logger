@@ -12,6 +12,8 @@ typedef char error_msg[255];
 
 /* ********** CONSTANT VALUES DECLARATION ********** */
 
+#define ERR_MSG_ID 0x1000
+
 #define NUM_CAN_FRAMES_TO_EGRESS 3
 
 /* These constants define the IDs of the CAN frames to be egressed */
