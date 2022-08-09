@@ -57,7 +57,7 @@ cJSON_msg_50x_t* parse_MMR_CAN_msg_id();
 
     @return: 0 if success otherwise -1
 */
-int create_msg_50x(cJSON_msg_50x_t* msg, cJSON* parser, unsigned int msg_id, unsigned int n_MMR_msgs, char** fields);
+int create_msg_50x(cJSON_msg_50x_t* msg, cJSON* parser, canid_t msg_id, unsigned int n_MMR_msgs, char** fields);
 /*
     This function checks wether a msg has correctly formatted params or not
 
@@ -67,7 +67,7 @@ int create_msg_50x(cJSON_msg_50x_t* msg, cJSON* parser, unsigned int msg_id, uns
 
     @return: 0 if everything is correct otherwise -1
 */
-int check_msg_info_correctness(unsigned int msg_id, char* msg_desc, cJSON_msg_info_t* msg);
+int check_msg_info_correctness(canid_t msg_id, char* msg_desc, cJSON_msg_info_t* msg);
 /*
     This function simply prints all the information by a generic msg
 
