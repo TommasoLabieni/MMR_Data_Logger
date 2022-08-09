@@ -54,4 +54,11 @@ int create_msg_500(cJSON_msg_500_t* msg, cJSON* parser);
     @return: 0 if everything is correct otherwise -1
 */
 int check_msg_info_correctness(unsigned int msg_id, char* msg_desc, cJSON_msg_info_t* msg);
+/*
+    This function simply prints all the information by a generic msg
+
+    @param msg: Msg to be printed
+
+    @return: nothing
+*/
 void print_common_msgs_info(cJSON_msg_info_t* msg);
