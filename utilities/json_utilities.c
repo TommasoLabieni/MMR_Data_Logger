@@ -25,7 +25,7 @@ cJSON_msg_50x_t* parse_MMR_CAN_msg_id()
     /* Matrix containing all MSG 500 fields */
     char *msg_500_fields[MSG_500_N_MMR_MSGS] = {"SPEED_ACTUAL", "SPEED_TARGET","STEER_ACTUAL", "STEER_TARGET","BRAKE_ACTUAL", "BRAKE_TARGET","MOTOR_M_ACTUAL", "MOTOR_M_TARGET"}; 
     
-    create_msg_50x(&msg_50x[0], msg_parser, 0x500, MSG_500_N_MMR_MSGS, msg_500_fields);
+    create_msg_50x(&msg_50x[0], msg_parser, 0x500, MSG_500_DLC, MSG_500_N_MMR_MSGS, msg_500_fields);
     
     /* ****************************************** */
 
@@ -36,7 +36,7 @@ cJSON_msg_50x_t* parse_MMR_CAN_msg_id()
     /* Matrix containing all MSG 501 fields */
     char *msg_501_fields[MSG_501_N_MMR_MSGS] = {"ACC_LONGITUDINAL", "ACC_LATERAL", "YAW_RATE"}; 
     
-    create_msg_50x(&msg_50x[1], msg_parser, 0x501, MSG_501_N_MMR_MSGS, msg_501_fields);
+    create_msg_50x(&msg_50x[1], msg_parser, 0x501, MSG_501_DLC, MSG_501_N_MMR_MSGS, msg_501_fields);
     
     /* ****************************************** */
 
@@ -47,20 +47,26 @@ cJSON_msg_50x_t* parse_MMR_CAN_msg_id()
     /* Matrix containing all MSG 502 fields */
     char *msg_502_fields[MSG_502_N_MMR_MSGS] = {"AS_STATE", "EBS_STATE","AMI_STATE", "STEERING_STATE","SERVICE_BRAKE_STATE", "LAP_COUNTER","CONES_COUNT_ACTUAL", "CONES_COUNT_TOTAL"}; 
 
-    create_msg_50x(&msg_50x[2], msg_parser, 0x502,  MSG_502_N_MMR_MSGS, msg_502_fields);
+    create_msg_50x(&msg_50x[2], msg_parser, 0x502,  MSG_502_DLC, MSG_502_N_MMR_MSGS, msg_502_fields);
 
     /* ****************************************** */
 
     return msg_50x;
 }
 
-int create_msg_50x(cJSON_msg_50x_t* msg, cJSON* parser, unsigned int msg_id, unsigned int n_MMR_msgs, char** fields)
+int create_msg_50x(cJSON_msg_50x_t* msg, cJSON* parser, canid_t msg_id, unsigned int msg_dlc, unsigned int n_MMR_msgs, char** fields)
 {
     printf("Creating Message 0x%.3x\n", msg_id & 0x7FF);
     cJSON *ECU_payload, *ECU_payload_it, *parser_it, *msg_info, *msg_info_it;
 
     err_t ret;
     
+    /* Assign msg id */
+    msg->msg_id = msg_id;
+
+    /* Assign msg DLC */
+    msg->msg_dlc = msg_dlc;
+
     /* Allocate memory for msg info */
     msg->msg_info.msg_info_ptr = malloc(n_MMR_msgs * sizeof(cJSON_msg_info_t));
 
@@ -122,7 +128,7 @@ int create_msg_50x(cJSON_msg_50x_t* msg, cJSON* parser, unsigned int msg_id, uns
     return 0;
 }
 
-int check_msg_info_correctness(unsigned int msg_id, char* msg_desc, cJSON_msg_info_t* msg)
+int check_msg_info_correctness(canid_t msg_id, char* msg_desc, cJSON_msg_info_t* msg)
 {
     // printf("CHECKING MESSAGE %x. FIELD: %s\n", msg_id, msg_desc);
 

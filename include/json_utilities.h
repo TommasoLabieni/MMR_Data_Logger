@@ -37,6 +37,7 @@ typedef struct
 {
     cJSON_50x_msg_info_t msg_info;
     canid_t msg_id;
+    unsigned int msg_dlc;
 } cJSON_msg_50x_t;
 
 
@@ -52,12 +53,13 @@ cJSON_msg_50x_t* parse_MMR_CAN_msg_id();
     @param msg: reference to the msg that has to be created
     @param parser: JSON File parser
     @param msg_id: Id of the message
+    @param msg_dlc: DLC of the message
     @param n_MMR_msgs: number of messages to parse 
     @param fields: JSON-MMR-formatted Field to parse
 
     @return: 0 if success otherwise -1
 */
-int create_msg_50x(cJSON_msg_50x_t* msg, cJSON* parser, canid_t msg_id, unsigned int n_MMR_msgs, char** fields);
+int create_msg_50x(cJSON_msg_50x_t* msg, cJSON* parser, canid_t msg_id, unsigned int msg_dlc, unsigned int n_MMR_msgs, char** fields);
 /*
     This function checks wether a msg has correctly formatted params or not
 
