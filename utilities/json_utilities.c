@@ -200,3 +200,35 @@ void print_common_msgs_info(cJSON_msg_info_t* msg)
 
     printf("%s\n", info);
 }
+
+int main(void)
+{
+    long len = 0;
+    int temp;
+    char *JSON_content, *filename = "./MMR_CAN_msg_id.json";
+	
+
+    FILE* fp = fopen(filename, "rb+");
+    if(!fp)
+    {
+		perror("err open");
+        return 1;
+    }
+
+    fseek(fp, 0, SEEK_END);
+    len = ftell(fp);
+    if(0 == len)
+    {
+		perror("len");
+        return 1;
+    }
+
+    fseek(fp, 0, SEEK_SET);
+    JSON_content = (char*) malloc(sizeof(char) * len);
+    temp = fread(JSON_content, 1, len, fp);
+
+    fclose(fp);
+    parse_MMR_CAN_msg_id(JSON_content);
+
+	return 0;
+}
