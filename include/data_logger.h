@@ -1,7 +1,8 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
+#ifndef DATA_LOGGER_H
+#define DATA_LOGGER_H
+
+#include <basic_utils.h>
+#include <json_utilities.h>
 
 #include <net/if.h>
 #include <sys/ioctl.h>
@@ -12,18 +13,20 @@
 #include <linux/can/bcm.h>
 
 #define DEVICE_INTERFACE "vcan0"
-#define MSG_500_DLC 8
-#define MSG_501_DLC 6
-#define MSG_502_DLC 5
-
-typedef __s32 err_t;
-typedef __s8 error_msg[255];
 
 /* BCM Type definition */
 typedef struct
 {
-		struct bcm_msg_head msg_head;
-		struct can_frame frame;
+        struct bcm_msg_head msg_head;
+        struct can_frame frame;
 } can_msg;
 
-void create_frame(can_msg* msg, canid_t can_id, __u8 dlc);
+typedef struct {
+        canid_t can_id;
+        canid_t can_mask;
+} can_filter;
+
+void create_egress_BCM(can_msg* msg, canid_t can_id, __u8 dlc);
+void create_sniffer_filters(struct can_filter* filters, const cJSON_msg_50x_t* msg);
+char* get_MMR_CAN_frame_descripion(cJSON_msg_50x_t* msg_50x, unsigned int msg_id);
+#endif //DATA_LOGGER_H
