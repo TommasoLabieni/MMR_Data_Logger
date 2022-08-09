@@ -21,7 +21,7 @@ MESSAGE 0X500 DV driving dynamics 1, 8B:
     Steer_target:                       bit 24->31, signed,        °,       0.5         0x1080008A
     Brake_act:                          bit 32->39, unsigned,      %,       1           0x127
     Brake_target:                       bit 40->47, unsigned,      %,       1           0x129
-    Motor_M_act:                        bit 48->55, signed,        %;       1           0x000000C0 (ECU byte 4, 5)
+    Motor_M_act:                        bit 48->55, signed,        %;       1           0x000000C2 (ECU byte 4, 5)
     Motor_M_target:                     bit 56->63, signed,        %;       1           0x8C
     
 MESSAGE 0X501 DV driving dynamics 2, 6B:
