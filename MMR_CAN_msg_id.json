@@ -1,0 +1,15 @@
+{
+    "__comment__": "!!!!!!!!!!! VERY IMPORTANT: ALL MSGS IDS HAVE TO BE INTEGERS SINCE JSON DOES NOT SUPPORT HEX VALUES !!!!!!!!!!!",
+    "msg_500": [
+        {
+            "SPEED_ACTUAL_ID": 141,
+            "SPEED_TARGET_ID": 143,
+            "STEER_ACTUAL_ID": 267,
+            "STEER_TARGET_ID": 138,
+            "BRAKE_ACTUAL_ID": 295,
+            "BRAKE_TARGET_ID": 297,
+            "MOTOR_M_ACTUAL_ID":192,
+            "MOTOR_M_TARGET_ID":140
+        }   
+    ]
+}
