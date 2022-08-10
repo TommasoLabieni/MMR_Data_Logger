@@ -110,6 +110,7 @@ int create_msg_50x(cJSON_msg_50x_t* msg, cJSON* parser, canid_t msg_id, unsigned
                 }
                 msg->msg_info.msg_info_ptr[i].msg_SCALE = cJSON_GetObjectItemCaseSensitive(msg_info_it, "SCALE");
                 msg->msg_info.msg_info_ptr[i].msg_MMR_ID = cJSON_GetObjectItemCaseSensitive(msg_info_it, "MMR_ID");
+                msg->msg_info.msg_info_ptr[i].msg_DATA_TYPE = cJSON_GetObjectItemCaseSensitive(msg_info_it, "DATA_TYPE");
 
                 /* Check that these values are correct */
                 
@@ -201,12 +202,19 @@ int check_msg_info_correctness(canid_t msg_id, char* msg_desc, cJSON_msg_info_t*
     /* Check SCALE */
     if (!cJSON_IsNumber(msg->msg_SCALE))
     {
-        perror("SCALE Is NaN");
+        perror("SCALE Is not a String");
         return -1;
     }
 
     /* Check MMR_ID */
     if (!cJSON_IsNumber(msg->msg_MMR_ID))
+    {
+        perror("MMR_ID Is NaN");
+        return -1;
+    }
+
+    /* Check DATA_TYPE */
+    if (!cJSON_IsString(msg->msg_DATA_TYPE))
     {
         perror("MMR_ID Is NaN");
         return -1;
@@ -253,7 +261,7 @@ void print_common_msgs_info(cJSON_msg_info_t* msg)
         );
     }
 
-    sprintf(info, "%sSCALE: %d\nMMR_ID: %.3x", info, msg->msg_SCALE->valueint, msg->msg_MMR_ID->valueint);
+    sprintf(info, "%sSCALE: %d\nMMR_ID: %.3x\nDATA_TYPE: %s", info, msg->msg_SCALE->valueint, msg->msg_MMR_ID->valueint, msg->msg_DATA_TYPE->valuestring);
 
     printf("%s\n", info);
 }

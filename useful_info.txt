@@ -14,43 +14,43 @@
 ***** NOTE: ALL % VALS HAVE TO BE MULTIPLIED BY 100 *****
 
 MESSAGE 0X500 DV driving dynamics 1, 8B:
-    NAME                                LENGTH      FORMAT         UNIT     SCALE       MMR_ID
-    Speed_Actual:                       bit 0->7,   unsigned,      km/h,    1           0x8D
-    Speed_Target:                       bit 8->15,  unsigned,      km/h,    1           0x8F
-    Steer_act:                          bit 16->23, signed,        °,       0.5         0x1080010B
-    Steer_target:                       bit 24->31, signed,        °,       0.5         0x1080008A
-    Brake_act:                          bit 32->39, unsigned,      %,       1           0x127
-    Brake_target:                       bit 40->47, unsigned,      %,       1           0x129
-    Motor_M_act:                        bit 48->55, signed,        %;       1           0x000000C2 (ECU byte 4, 5)
-    Motor_M_target:                     bit 56->63, signed,        %;       1           0x8C
+    NAME                                LENGTH      FORMAT         UNIT     SCALE       MMR_ID                          DATA_TYPE
+    Speed_Actual:                       bit 0->7,   unsigned,      km/h,    1           0x8D                            float
+    Speed_Target:                       bit 8->15,  unsigned,      km/h,    1           0x8F                            float
+    Steer_act:                          bit 16->23, signed,        °,       0.5         0x1080010B                      float  
+    Steer_target:                       bit 24->31, signed,        °,       0.5         0x1080008A                      float
+    Brake_act:                          bit 32->39, unsigned,      %,       1           0x127                           float
+    Brake_target:                       bit 40->47, unsigned,      %,       1           0x129                           float
+    Motor_M_act:                        bit 48->55, signed,        %;       1           0x000000C2 (ECU byte 4, 5)      short
+    Motor_M_target:                     bit 56->63, signed,        %;       1           0x8C                            uint8_t
     
 MESSAGE 0X501 DV driving dynamics 2, 6B:
-    NAME                                LENGTH      FORMAT         UNIT     SCALE       MMR_ID
-    Acc_Long:                           bit 0->15,  signed,        m/s^2,   1/512       0x95
-    Acc_Lateral:                        bit 16->31, signed,        m/s^2,   1/512       0x96
-    Yaw_Rate:                           bit 32->47, signed,        °/s,     1/128       0x97
+    NAME                                LENGTH      FORMAT         UNIT     SCALE       MMR_ID                          DATA_TYPE
+    Acc_Long:                           bit 0->15,  signed,        m/s^2,   1/512       0x95                            
+    Acc_Lateral:                        bit 16->31, signed,        m/s^2,   1/512       0x96                            
+    Yaw_Rate:                           bit 32->47, signed,        °/s,     1/128       0x97                            
 
 MESSAGE 0X502 DV system status, 5B:
-    NAME                                LENGTH      FORMAT          UNIT    SCALE       MMR_ID
-    AS_State_Off:                       bit 0->2,   1,              X,      1,          0x2C (ENUM 0)
-    AS_State_Ready:                     bit 0->2,   2,              X,      1,          0x2C (ENUM 1)
-    AS_State_Driving:                   bit 0->2,   3,              X,      1,          0x2C (ENUM 2)
-    AS_State_Emergency:                 bit 0->2,   4,              X,      1,          0x2C (ENUM 3)
-    AS_State_Finish:                    bit 0->2,   5,              X,      1,          0x2C (ENUM 4)
-    EBS_State_unavailable:              bit 3->4,   1,              X,      1,          0x2A (ENUM 0)
-    EBS_State_armed:                    bit 3->4,   2,              X,      1,          0x2A (ENUM 1)
-    EBS_State_activated:                bit 3->4,   3,              X,      1,          0x2A (ENUM 2)   
-    AMI_State_acceleration:             bit 5->7,   1,              X,      1,          0x40 (ENUM 1)
-    AMI_State_skidpad:                  bit 5->7,   2,              X,      1,          0x40 (ENUM 2)
-    AMI_State_trackdrive:               bit 5->7,   3,              X,      1,          0x40 (ENUM 4)
-    AMI_State_braketest:                bit 5->7,   4,              X,      1,          0x40 (ENUM 5)
-    AMI_State_inspection:               bit 5->7,   5,              X,      1,          0x40 (ENUM 6)
-    AMI_State_autocross:                bit 5->7,   6,              X,      1,          0x40 (ENUM 3)
-    Steering_State:                     bit 8,      bool,           X,      1,          0x90
+    NAME                                LENGTH      FORMAT          UNIT    SCALE       MMR_ID                          DATA_TYPE
+    AS_State_Off:                       bit 0->2,   1,              X,      1,          0x2C (ENUM 0)                   
+    AS_State_Ready:                     bit 0->2,   2,              X,      1,          0x2C (ENUM 1)                   
+    AS_State_Driving:                   bit 0->2,   3,              X,      1,          0x2C (ENUM 2)                   
+    AS_State_Emergency:                 bit 0->2,   4,              X,      1,          0x2C (ENUM 3)                   
+    AS_State_Finish:                    bit 0->2,   5,              X,      1,          0x2C (ENUM 4)                   
+    EBS_State_unavailable:              bit 3->4,   1,              X,      1,          0x2A (ENUM 0)                   
+    EBS_State_armed:                    bit 3->4,   2,              X,      1,          0x2A (ENUM 1)                   
+    EBS_State_activated:                bit 3->4,   3,              X,      1,          0x2A (ENUM 2)                   
+    AMI_State_acceleration:             bit 5->7,   1,              X,      1,          0x40 (ENUM 1)                   
+    AMI_State_skidpad:                  bit 5->7,   2,              X,      1,          0x40 (ENUM 2)                   
+    AMI_State_trackdrive:               bit 5->7,   3,              X,      1,          0x40 (ENUM 4)                   
+    AMI_State_braketest:                bit 5->7,   4,              X,      1,          0x40 (ENUM 5)                   
+    AMI_State_inspection:               bit 5->7,   5,              X,      1,          0x40 (ENUM 6)                   
+    AMI_State_autocross:                bit 5->7,   6,              X,      1,          0x40 (ENUM 3)                   
+    Steering_State:                     bit 8,      bool,           X,      1,          0x90                            
     Service_brake_state_disengaged:     bit 9->10,  1,              X,      1,          0x008000C7 (check that p_oil < 4) si legge da ECU primi 2 bytes dividendolo per 200
     Service_brake_state_engaged:        bit 9->10,  2,              X,      1,          0x008000C7 (check that p_oil >= 4) si legge da ECU primi 2 bytes dividendolo per 200
     Service_brake_state_available:      bit 9->10,  3,              X,      1,          0x008000C7 i byte 5,6 e/o 7,8 devono valere 1
-    Lap_Counter                         bit 11->15  unsigned,       X,      1,          0x91
-    Cones_Count_Actual                  bit 16->23  unsigned,       X,      1,          0x92
-    Cones_Count_All                     bit 24->39  unsigned,       X,      1,          0x93
+    Lap_Counter                         bit 11->15  unsigned,       X,      1,          0x91                            
+    Cones_Count_Actual                  bit 16->23  unsigned,       X,      1,          0x92                            
+    Cones_Count_All                     bit 24->39  unsigned,       X,      1,          0x93                            
 """
