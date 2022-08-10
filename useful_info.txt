@@ -50,7 +50,7 @@ MESSAGE 0X502 DV system status, 5B:
     Service_brake_state_disengaged:     bit 9->10,  1,              X,      1,          0x008000C7 (check that p_oil < 4) si legge da ECU primi 2 bytes dividendolo per 200
     Service_brake_state_engaged:        bit 9->10,  2,              X,      1,          0x008000C7 (check that p_oil >= 4) si legge da ECU primi 2 bytes dividendolo per 200
     Service_brake_state_available:      bit 9->10,  3,              X,      1,          0x008000C7 i byte 5,6 e/o 7,8 devono valere 1
-    Lap_Counter                         bit 11->15  unsigned,       X,      1,          0x91                            
-    Cones_Count_Actual                  bit 16->23  unsigned,       X,      1,          0x92                            
-    Cones_Count_All                     bit 24->39  unsigned,       X,      1,          0x93                            
+    Lap_Counter                         bit 11->15  unsigned,       X,      1,          0x91                            uint8_t
+    Cones_Count_Actual                  bit 16->23  unsigned,       X,      1,          0x92                            uint8_t
+    Cones_Count_All                     bit 24->39  unsigned,       X,      1,          0x93                            uint8_t
 """
