@@ -41,7 +41,7 @@
                     "FORMAT": "signed",
                     "IS_PERCENTAGE": false,
                     "IS_ECU_MSG": false,
-                    "SCALE": 0.5,
+                    "SCALE": 2,
                     "MMR_ID": 267,
                     "DATA_TYPE": "float"
                 }
@@ -53,7 +53,7 @@
                     "FORMAT": "signed",
                     "IS_PERCENTAGE": false,
                     "IS_ECU_MSG": false,
-                    "SCALE": 0.5,
+                    "SCALE": 2,
                     "MMR_ID": 138,
                     "DATA_TYPE": "float"
                 }
@@ -64,7 +64,7 @@
                     "PAYLOAD_BIT_END": 39,
                     "FORMAT": "unsigned",
                     "IS_PERCENTAGE": true,
-                    "MAX_PERC_VALUE": 1000,
+                    "MAX_PERC_VALUE": 100,
                     "IS_ECU_MSG": false,
                     "SCALE": 1,
                     "MMR_ID": 295,
@@ -77,7 +77,7 @@
                     "PAYLOAD_BIT_END": 47,
                     "FORMAT": "unsigned",
                     "IS_PERCENTAGE": true,
-                    "MAX_PERC_VALUE": 1000,
+                    "MAX_PERC_VALUE": 100,
                     "IS_ECU_MSG": false,
                     "SCALE": 1,
                     "MMR_ID": 297,
@@ -90,7 +90,7 @@
                     "PAYLOAD_BIT_END": 55,
                     "FORMAT": "signed",
                     "IS_PERCENTAGE": true,
-                    "MAX_PERC_VALUE": 10000,
+                    "MAX_PERC_VALUE": 100,
                     "IS_ECU_MSG": true,
                     "ECU_PAYLOAD": [
                         {
@@ -110,7 +110,7 @@
                     "PAYLOAD_BIT_END": 63,
                     "FORMAT": "signed",
                     "IS_PERCENTAGE": true,
-                    "MAX_PERC_VALUE": 1000,
+                    "MAX_PERC_VALUE": 100,
                     "IS_ECU_MSG": false,
                     "SCALE": 1,
                     "MMR_ID": 140,
@@ -128,7 +128,7 @@
                     "FORMAT": "signed",
                     "IS_PERCENTAGE": false,
                     "IS_ECU_MSG": false,
-                    "SCALE": 0.001953125,
+                    "SCALE": 512,
                     "MMR_ID": 149,
                     "DATA_TYPE": "float"
                 }
@@ -140,7 +140,7 @@
                     "FORMAT": "signed",
                     "IS_PERCENTAGE": false,
                     "IS_ECU_MSG": false,
-                    "SCALE": 0.001953125,
+                    "SCALE": 512,
                     "MMR_ID": 150,
                     "DATA_TYPE": "float"
                 }
@@ -152,7 +152,7 @@
                     "FORMAT": 1,
                     "IS_PERCENTAGE": false,
                     "IS_ECU_MSG": false,
-                    "SCALE": 0.0078125,
+                    "SCALE": 128,
                     "MMR_ID": 151,
                     "DATA_TYPE": "float"
                 }

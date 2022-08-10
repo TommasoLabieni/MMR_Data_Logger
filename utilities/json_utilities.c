@@ -297,6 +297,26 @@ char* fileToCString(char* filename)
     return JSON_content;
 }
 
+bool is_enum(char* data_type)
+{
+    return (!strcmp(data_type,"enum"));
+}
+
+bool is_float(char* data_type)
+{
+    return (!strcmp(data_type,"float"));
+}
+
+bool is_short(char* data_type)
+{
+    return (!strcmp(data_type,"short"));
+}
+
+bool is_byte(char* data_type)
+{
+    return (!strcmp(data_type,"byte"));
+}
+
 int test_func(char *filename)
 {
     char* JSON_content = fileToCString(filename);

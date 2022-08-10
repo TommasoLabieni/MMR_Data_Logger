@@ -87,4 +87,10 @@ void print_common_msgs_info(cJSON_msg_info_t* msg);
     @return: 0 if ok otherwise -1
 */
 int test_func(char* filename);
+
+bool is_enum(char* data_type);
+bool is_float(char* data_type);
+bool is_short(char* data_type);
+bool is_byte(char* data_type);
+
 #endif //JSON_UTILITIES_H
