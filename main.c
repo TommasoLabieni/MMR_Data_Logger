@@ -67,9 +67,9 @@ int main(int argc, char **argv)
 	create_egress_BCM(&msg_502, MSG_502_ID, MSG_502_DLC);
 
 	/* Fixed frames creation (of course to be removed; this is just an example on how to write to the can frame) */
-    memcpy(msg_500.frame.data,(__u8[]){0x00,0x28,0xFF,0x00,0x00,0x01,0xFF,0x00},MSG_500_DLC);
-    memcpy(msg_501.frame.data,(__u8[]){0x00,0x32,0xFF,0x00,0x00,0x01},MSG_501_DLC);
-    memcpy(msg_502.frame.data,(__u8[]){0x00,0x3C,0xFF,0x00,0x00},MSG_502_DLC);
+    memcpy(msg_500.frame.data,(__u8[]){0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},MSG_500_DLC);
+    memcpy(msg_501.frame.data,(__u8[]){0x00,0x00,0x00,0x00,0x00,0x00},MSG_501_DLC);
+    memcpy(msg_502.frame.data,(__u8[]){0x00,0x00,0x00,0x00,0x00},MSG_502_DLC);
 
 	msg_50x_sniffer = parse_MMR_CAN_msg_id();
 
@@ -97,49 +97,42 @@ int main(int argc, char **argv)
 		if (nbytes < sizeof(struct can_frame)) {
 			perror("Read of an incomplete CAN frame\n");
 			exit(4);
-		} else if (nbytes == sizeof(struct can_frame))
-		{
-			char* msg_desc = get_MMR_CAN_frame_description(msg_50x_sniffer, recv_frame.can_id & CAN_SFF_MASK);
-			if (msg_desc != NULL)
+		} else if (nbytes == sizeof(struct can_frame)) {
+			cJSON_msg_50x_t* egress_msg = MMR_CAN_frame_to_EGRESS_frame(msg_50x_sniffer, recv_frame.can_id & CAN_SFF_MASK);
+			if (egress_msg != NULL)
 			{
-				printf("ID: %.3x\t --> %s.\n\tDATA:\t", recv_frame.can_id & CAN_SFF_MASK, msg_desc);
+				printf("ID: %.3x\t --> %s.\n\tDATA:\t", recv_frame.can_id & CAN_SFF_MASK, get_MMR_CAN_frame_description(egress_msg, recv_frame.can_id));
 			}
 			for (__u8 i=0; i < recv_frame.can_dlc; i++)
 			{
 				printf("%d:%x ", i, recv_frame.data[i]);
 			}
 			printf("\n");
+			printf("THIS MESSAGES GOES INTO MSG OF ID: %x\n", egress_msg->msg_id);
 
-			canid_t egress_msg_id = MMR_CAN_frame_to_EGRESS_frame(msg_50x_sniffer, recv_frame.can_id & CAN_SFF_MASK);
-			if (egress_msg_id != ERR_MSG_ID)
+			/* Retrieval of msg_50x info */
+			cJSON_msg_info_t* msg_info = MMR_CAN_frame_to_EGRESS_frame_info(egress_msg, recv_frame.can_id & CAN_SFF_MASK);
+
+			if (msg_info == NULL)
 			{
-				printf("THIS MESSAGES GOES INTO MSG OF ID: %x\n", egress_msg_id);
-				switch (egress_msg_id)
-				{
-				case 0x500:
-					ret = insert_MMR_CAN_frame_into_EGRESS_frame(recv_frame, &(msg_50x_sniffer[0]));
-					break;
-				case 0x501:
-					ret = insert_MMR_CAN_frame_into_EGRESS_frame(recv_frame, &(msg_50x_sniffer[1]));
-					break;
-				case 0x502:
-					ret = insert_MMR_CAN_frame_into_EGRESS_frame(recv_frame, &(msg_50x_sniffer[2]));
-					break;
-				default:
-					perror("SOMETHING IS WRONG! RECEIVED AN EXTERNAL CAN FRAME!!!!");
-					exit(5);
-					break;
-				}
-
-				if (ret)
-				{
-					perror("Error during frame insert\n");
-					exit(6);
-				}
-			} else {
-					perror("SOMETHING IS WRONG! RECEIVED AN EXTERNAL CAN FRAME!!!!");
-					exit(5);
+				perror("FRAME NOT FOUND");
+				exit(5);
 			}
+
+			can_msg* msg_50x_ptr = (MSG_500_ID == egress_msg->msg_id ? &(msg_500) : (MSG_501_ID == egress_msg->msg_id ? &(msg_501) : &(msg_502)));
+
+			ret = insert_MMR_CAN_frame_into_EGRESS_frame(recv_frame, msg_50x_ptr, egress_msg->msg_dlc, msg_info);
+
+			if (ret)
+			{
+				perror("Error during frame insert\n");
+				exit(6);
+			}
+
+			/* Write CAN messages to kernel space. From now on, the kernel will transmit all 3 CAN frames to the CAN network every 100ms without the need of the syscall write() */
+			write(sock_send, &msg_500, sizeof(can_msg));
+			write(sock_send, &msg_501, sizeof(can_msg));
+			write(sock_send, &msg_502, sizeof(can_msg));
 		}
 	}
 
