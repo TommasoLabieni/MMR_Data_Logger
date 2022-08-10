@@ -1,18 +1,15 @@
+include ./Makefile.variable
+
 SRC=./src
 IDIR=./include
 ODIR=./obj
 UTILSDIR=./utilities
 
-CC=gcc
-CFLAGS=-I$(IDIR) -lcjson
-
-_OBJ=main.o
-_OBJ_UTILS=can_utilities.o json_utilities.o
 
 UTILS_SRC=$(UTILSDIR)/*.c
 
+_OBJ=main.o
 OBJ=$(patsubst %, $(ODIR)/%, $(_OBJ))
-OBJ_UTILS=$(patsubst %, $(ODIR)/%, $(_OBJ_UTILS))
 
 all: main
 

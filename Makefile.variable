@@ -1,0 +1,5 @@
+CC=gcc
+CFLAGS=-I$(IDIR) -lcjson -lm
+
+_OBJ_UTILS=can_utilities.o json_utilities.o byte_conversion.o
+OBJ_UTILS=$(patsubst %, $(ODIR)/%, $(_OBJ_UTILS))

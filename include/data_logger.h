@@ -3,6 +3,7 @@
 
 #include <basic_utils.h>
 #include <json_utilities.h>
+#include <byte_conversion.h>
 
 #include <net/if.h>
 #include <sys/ioctl.h>
