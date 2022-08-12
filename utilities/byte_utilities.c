@@ -69,7 +69,7 @@ void shift_array_left(__uint8_t* v, __uint8_t index, __uint8_t bits)
     v[index] <<= bits;
 }
 
-void bit_to_bit_AND_rray(__uint8_t* v_dst, __uint8_t* v_src, __uint8_t len)
+void bit_to_bit_AND_array(__uint8_t* v_dst, __uint8_t* v_src, __uint8_t len)
 {
     for (__int8_t i=0; i < len; i++)
     {
@@ -77,7 +77,7 @@ void bit_to_bit_AND_rray(__uint8_t* v_dst, __uint8_t* v_src, __uint8_t len)
     }
 }
 
-void bit_to_bit_OR_rray(__uint8_t* v_dst, __uint8_t* v_src, __uint8_t len)
+void bit_to_bit_OR_array(__uint8_t* v_dst, __uint8_t* v_src, __uint8_t len)
 {
     for (__int8_t i=0; i < len; i++)
     {
