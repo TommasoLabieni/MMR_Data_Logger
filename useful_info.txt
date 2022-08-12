@@ -18,10 +18,10 @@ MESSAGE 0X500 DV driving dynamics 1, 8B:
     Speed_Actual:                       bit 0->7,   unsigned,      km/h,    1           0x8D                            float
     Speed_Target:                       bit 8->15,  unsigned,      km/h,    1           0x8F                            float
     Steer_act:                          bit 16->23, signed,        °,       0.5         0x1080010B                      float  
-    Steer_target:                       bit 24->31, signed,        °,       0.5         0x1080008A                      float
+    Steer_target:                       bit 24->31, signed,        °,       0g.5         0x1080008A                     float
     Brake_act:                          bit 32->39, unsigned,      %,       1           0x127                           float
     Brake_target:                       bit 40->47, unsigned,      %,       1           0x129                           float
-    Motor_M_act:                        bit 48->55, signed,        %;       1           0x000000C2 (ECU byte 4, 5)      short
+    Motor_M_act:                        bit 48->55, signed,        %;       1           0x000000C2 (ECU byte 6, 7)      short
     Motor_M_target:                     bit 56->63, signed,        %;       1           0x8C                            uint8_t
     
 MESSAGE 0X501 DV driving dynamics 2, 6B:
@@ -40,12 +40,12 @@ MESSAGE 0X502 DV system status, 5B:
     EBS_State_unavailable:              bit 3->4,   1,              X,      1,          0x2A (ENUM 0)                   
     EBS_State_armed:                    bit 3->4,   2,              X,      1,          0x2A (ENUM 1)                   
     EBS_State_activated:                bit 3->4,   3,              X,      1,          0x2A (ENUM 2)                   
-    AMI_State_acceleration:             bit 5->7,   1,              X,      1,          0x40 (ENUM 1)                   
-    AMI_State_skidpad:                  bit 5->7,   2,              X,      1,          0x40 (ENUM 2)                   
-    AMI_State_trackdrive:               bit 5->7,   3,              X,      1,          0x40 (ENUM 4)                   
-    AMI_State_braketest:                bit 5->7,   4,              X,      1,          0x40 (ENUM 5)                   
-    AMI_State_inspection:               bit 5->7,   5,              X,      1,          0x40 (ENUM 6)                   
-    AMI_State_autocross:                bit 5->7,   6,              X,      1,          0x40 (ENUM 3)                   
+    AMI_State_acceleration:             bit 5->7,   1,              X,      1,          0x40 (ENUM 0)                   
+    AMI_State_skidpad:                  bit 5->7,   2,              X,      1,          0x40 (ENUM 1)                   
+    AMI_State_trackdrive:               bit 5->7,   3,              X,      1,          0x40 (ENUM 2)                   
+    AMI_State_braketest:                bit 5->7,   4,              X,      1,          0x40 (ENUM 3)                   
+    AMI_State_inspection:               bit 5->7,   5,              X,      1,          0x40 (ENUM 4)                   
+    AMI_State_autocross:                bit 5->7,   6,              X,      1,          0x40 (ENUM 5)                   
     Steering_State:                     bit 8,      bool,           X,      1,          0x90                            
     Service_brake_state_disengaged:     bit 9->10,  1,              X,      1,          0x008000C7 (check that p_oil < 4) si legge da ECU primi 2 bytes dividendolo per 200
     Service_brake_state_engaged:        bit 9->10,  2,              X,      1,          0x008000C7 (check that p_oil >= 4) si legge da ECU primi 2 bytes dividendolo per 200
