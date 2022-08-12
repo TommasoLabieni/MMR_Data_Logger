@@ -22,6 +22,7 @@ typedef struct
     cJSON_ecu_payload_t *msg_ECU_PAYLOAD;
     cJSON *msg_SCALE;   
     cJSON *msg_MMR_ID;
+    cJSON *msg_MAX_ENUM_VALUE;
     cJSON *msg_DATA_TYPE;
 
 } cJSON_msg_info_t;

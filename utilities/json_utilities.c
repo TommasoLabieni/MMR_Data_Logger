@@ -110,6 +110,7 @@ int create_msg_50x(cJSON_msg_50x_t* msg, cJSON* parser, canid_t msg_id, unsigned
                 }
                 msg->msg_info.msg_info_ptr[i].msg_SCALE = cJSON_GetObjectItemCaseSensitive(msg_info_it, "SCALE");
                 msg->msg_info.msg_info_ptr[i].msg_MMR_ID = cJSON_GetObjectItemCaseSensitive(msg_info_it, "MMR_ID");
+                msg->msg_info.msg_info_ptr[i].msg_MAX_ENUM_VALUE = cJSON_GetObjectItemCaseSensitive(msg_info_it, "MAX_ENUM_VALUE");
                 msg->msg_info.msg_info_ptr[i].msg_DATA_TYPE = cJSON_GetObjectItemCaseSensitive(msg_info_it, "DATA_TYPE");
 
                 /* Check that these values are correct */
@@ -306,6 +307,12 @@ bool is_float(char* data_type)
 {
     return (!strcmp(data_type,"float"));
 }
+
+bool is_bool(char* data_type)
+{
+    return (!strcmp(data_type,"bool"));
+}
+
 
 bool is_short(char* data_type)
 {

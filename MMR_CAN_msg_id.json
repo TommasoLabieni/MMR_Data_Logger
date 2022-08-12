@@ -170,6 +170,7 @@
                     "IS_ECU_MSG": false,
                     "SCALE": 1,
                     "MMR_ID": 44,
+                    "MAX_ENUM_VALUE": 4,
                     "DATA_TYPE": "enum"
                 }
             ],
@@ -182,6 +183,7 @@
                     "IS_ECU_MSG": false,
                     "SCALE": 1,
                     "MMR_ID": 42,
+                    "MAX_ENUM_VALUE": 2,
                     "DATA_TYPE": "enum"
                 }
             ],
@@ -194,6 +196,7 @@
                     "IS_ECU_MSG": false,
                     "SCALE": 1,
                     "MMR_ID": 64,
+                    "MAX_ENUM_VALUE": 5,
                     "DATA_TYPE": "enum"
                 }
             ],
