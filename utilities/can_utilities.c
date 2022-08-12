@@ -148,26 +148,29 @@ int insert_MMR_CAN_frame_into_EGRESS_frame(struct can_frame recv_frame, can_msg*
         unset_CAN_k_th_bit(mask, i);
     }
 
-    // printf("NEW MASK IS:\t\t");
-    // printf_CAN_frame(mask, msg_dlc);
+    printf("NEW MASK IS:\t\t");
+    printf_CAN_frame(mask, msg_dlc);
 
     /* Get length of the msg to egress in bytes */
     __u8 n_bytes = bit_to_byte(msg_50x_info->msg_PBE->valueint - msg_50x_info->msg_PBS->valueint + 1);
 
     short format_data;
 
+    /* Check if CAN frame received is coming from ECU (note that ECU writes data in BIG ENDIAN)*/
     if (msg_50x_info->msg_IS_ECU_MESSAGE->valueint)
     {
         printf("ECU MESSAGE\n");
+        /* Get the index where data starts */
         __u8 byte_start = msg_50x_info->msg_ECU_PAYLOAD->ecu_payload_BYTE_START->valueint;
         __u8 len = msg_50x_info->msg_ECU_PAYLOAD->ecu_payload_BYTE_LENGTH->valueint;
         for (int i=0; i < len; i++)
         {
-            // printf("Byte Index: %u\n READ %x\n", byte_start+i, recv_frame.data[byte_start+len-i-1]);
-            format_data <<= 8;
-            format_data |= recv_frame.data[byte_start+len-i-1];
+            printf("Byte Index: %u\n READ %x\n", byte_start+i, recv_frame.data[byte_start+i]);
+            format_data |= recv_frame.data[byte_start+i];
+            if (i != (len-1))
+                format_data <<= 8;
         }
-
+        printf("FORMAT ECU: %d\n", format_data);
         format_data /= (short) msg_50x_info->msg_ECU_PAYLOAD->ecu_payload_DIVIDE_BY->valueint;
 
     }
@@ -182,13 +185,23 @@ int insert_MMR_CAN_frame_into_EGRESS_frame(struct can_frame recv_frame, can_msg*
 
         else
             format_data = float_to_byte(f_value);
-    }
+    } else if (is_short(msg_50x_info->msg_DATA_TYPE->valuestring) && (n_bytes == 2))
+    {
+        format_data = recv_frame.data[1];
+        format_data <<= 8;
+        format_data |= recv_frame.data[0];
+    } else
+        format_data = recv_frame.data[0];
     printf("FORMAT: %d\n", format_data);
 
     /* Percentage msg handler */
     if (msg_50x_info->msg_IS_PERCENTAGE->valueint)
     {
-        format_data *= 100 / msg_50x_info->msg_MAX_PERC_VALUE->valueint;
+        unsigned short perc_val = format_data;
+        perc_val *= 100;
+        perc_val /= msg_50x_info->msg_MAX_PERC_VALUE->valueint;
+        /* Limit % val to 100 */
+        format_data = (perc_val > 100 ? 100 : perc_val);
     }
 
     /* Scale MSG */
@@ -201,30 +214,42 @@ int insert_MMR_CAN_frame_into_EGRESS_frame(struct can_frame recv_frame, can_msg*
 
     // printf("INDEX: %u\n", byte_index);
 
+    /* TODO: CHECK ENUM */
+    if (is_enum(msg_50x_info->msg_DATA_TYPE->valuestring))
+        format_data = ((format_data > msg_50x_info->msg_MAX_ENUM_VALUE->valueint) ? msg_50x_info->msg_MAX_ENUM_VALUE->valueint : format_data);
+
+    /* Bool Check */
+    if (is_bool(msg_50x_info->msg_DATA_TYPE->valuestring))
+    {
+        printf("BOOL\n");
+        format_data = (format_data != 0 ? 1 : 0);
+    }
+
+
     int i=0;
     do
     {
         /* Copy CAN frame data */
-        output_msg[byte_index+i] |= format_data; //todo: add shift
+        output_msg[byte_index+i] |= format_data >> (8*i);
         ++i;
     } while (i < n_bytes);
 
     /* Shift output msg of PBS bits IF AND ONLY IF the msg is not a FULL BYTE LONG !!! */
     if (bit_to_byte(msg_50x_info->msg_PBE->valueint - msg_50x_info->msg_PBS->valueint + 1) == 0)
     {
-        // printf("Shifting Message\n");
+        printf("Shifting Message\n");
         shift_array_left(output_msg, byte_index, (msg_50x_info->msg_PBS->valueint % 8));
     }
 
-    // printf_CAN_frame(output_msg, msg_dlc);
+    printf_CAN_frame(output_msg, msg_dlc);
 
     /* Message created, now we have to replace old msg data with new one */
 
     /* First thing first, we have to make a bit-to-bit end between old_msg and MASK */
-    bit_to_bit_AND_rray(msg_50x->frame.data, mask, msg_dlc);
+    bit_to_bit_AND_array(msg_50x->frame.data, mask, msg_dlc);
 
-    /* Then, just make an bit-to-bit or between masked msg and new data */
-    bit_to_bit_OR_rray(msg_50x->frame.data, output_msg, msg_dlc);
+    /* Then, just make a bit-to-bit or between masked msg and new data to get the correct output msg*/
+    bit_to_bit_OR_array(msg_50x->frame.data, output_msg, msg_dlc);
 
     printf_CAN_frame(msg_50x->frame.data, msg_dlc);
 
